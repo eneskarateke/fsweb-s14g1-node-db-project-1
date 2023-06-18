@@ -3,40 +3,42 @@ const db = require("../../data/db-config.js");
 const accountsModel = require("./accounts-model.js");
 
 exports.checkAccountPayload = (req, res, next) => {
-  // KODLAR BURAYA
-  // Not: Validasyon için Yup(şu an yüklü değil!) kullanabilirsiniz veya kendiniz manuel yazabilirsiniz.
-  const { name, budget } = req.body;
-
   try {
-    if (budget === undefined || name === undefined) {
-      res.status(400).json({ message: "name and budget are required" });
+    let { name, budget } = req.body;
+
+    if (!name || !budget) {
+      return res.status(400).json({ message: "name and budget are required" });
     } else {
-      if (name) trimmedName = name.trim();
+      let trimmedName = name.trim();
+
       if (trimmedName.length < 3 || trimmedName.length > 100) {
-        res
+        return res
           .status(400)
           .json({ message: "name of account must be between 3 and 100" });
       } else if (typeof budget !== "number") {
-        res.status(400).json({ message: "budget of account must be a number" });
+        return res
+          .status(400)
+          .json({ message: "budget of account must be a number" });
       } else if (budget < 0 || budget > 1000000) {
-        res
+        return res
           .status(400)
           .json({ message: "budget of account is too large or too small" });
-      } else {
-        req.body.name = name;
-        next();
       }
+
+      req.body.name = trimmedName;
+      next();
     }
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 };
-exports.checkAccountNameUnique = async (req, res, next) => {
-  const name = req.body.name.trim();
 
+exports.checkAccountNameUnique = async (req, res, next) => {
   try {
     let isExist = false;
-    const existingAccount = await db("accounts").where("name", name).first();
+    const existingAccount = await db("accounts")
+      .where("name", req.body.name)
+      .first();
 
     isExist = existingAccount ? true : false;
 
