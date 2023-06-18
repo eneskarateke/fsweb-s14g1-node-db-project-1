@@ -60,7 +60,7 @@ exports.checkAccountId = async (req, res, next) => {
     if (!account) {
       return res.status(404).json({ message: "account not found" });
     } else {
-      res.account = account;
+      req.account = account;
       next();
     }
   } catch (error) {
