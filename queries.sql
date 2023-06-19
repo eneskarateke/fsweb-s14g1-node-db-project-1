@@ -31,5 +31,7 @@ set PostalCode = '11122'
 where ContactName = 'Bilbo Baggins'
 
 -- (Zorlayıcı Görev) Müşteriler tablosunda kaç farklı şehrin saklandığını keşfetmek için bir sorgu bulun. Tekrarlar çift sayılmamalıdır
-
+SELECT COUNT( DISTINCT City) as Cities
+FROM Customers;
 -- (Zorlayıcı Görev) 20 karakterden uzun adları olan tüm tedarikçileri bulun. Adın uzunluğunu almak için "length(SupplierName)" kullanabilirsiniz.
+SELECT SupplierName FROM Suppliers WHERE LENGTH(SupplierName) > 20

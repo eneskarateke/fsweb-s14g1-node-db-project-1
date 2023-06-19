@@ -4,6 +4,9 @@ const accountsModel = require("./accounts-model.js");
 
 const mw = require("./accounts-middleware.js");
 
+//ZORLAYICI GÖREV
+// const db = require("../../data/db-config.js");
+
 router.get("/", async (req, res, next) => {
   // KODLAR BURAYA
 
@@ -14,6 +17,30 @@ router.get("/", async (req, res, next) => {
     next(error);
   }
 });
+
+//ZORLAYICI GÖREV
+// router.get("/", (req, res, next) => {
+//   const { limit, sortby, sortdir } = req.query;
+
+//   let query = db("accounts");
+
+//   if (limit) {
+//     query = query.limit(limit);
+//   }
+
+//   if (sortby) {
+//     const direction = sortdir === "desc" ? "desc" : "asc";
+//     query = query.orderBy(sortby, direction);
+//   }
+
+//   query
+//     .then((accounts) => {
+//       res.json(accounts);
+//     })
+//     .catch((error) => {
+//       next(error);
+//     });
+// });
 
 router.get("/:id", mw.checkAccountId, (req, res, next) => {
   // KODLAR BURAYA
